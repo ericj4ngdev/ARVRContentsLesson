@@ -11,7 +11,6 @@ public class ControllerButton : MonoBehaviour
     public InputActionProperty PressY;
     public InputActionProperty PressA;
     public InputActionProperty PressB;
-    public InputActionProperty Home;
 
     void SpawnBowlingBall()
     {
@@ -19,12 +18,12 @@ public class ControllerButton : MonoBehaviour
         Ball.transform.position = spawnspot.position;
     }
 
-
     void Update()
     {
         if (PressX.action.WasPressedThisFrame())
         {
             Debug.Log("Pressed X");
+            // PinManager.Instance.SetPinPosition();
         }
 
         if (PressY.action.WasPressedThisFrame())
@@ -43,12 +42,5 @@ public class ControllerButton : MonoBehaviour
             Debug.Log("Pressed B");
             
         }
-
-        if (Home.action.WasPressedThisFrame())
-        {
-            Debug.Log("Pressed Home");
-        }
-
-
     }
 }
