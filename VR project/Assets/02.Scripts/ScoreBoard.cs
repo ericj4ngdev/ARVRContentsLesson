@@ -5,22 +5,41 @@ using UnityEngine;
 
 public class ScoreBoard : MonoBehaviour
 {
-    private int [][] Frame;
-    private int[] Fscore;
-    private bool[] isSpare;
-    private bool[] isStrike;
-    private bool[][] hit;
-    private int StrikeBonusCount = 2;
+    public GameObject Pin;
+    public Transform[] HittedPinPosition;
+    private int[] Score;        // 누적 프레임 총 스코어
+    private int[] Fscore;       // 각 프레임의 총 점수
+    private int[][] Frame;      // i : 프레임, j : 던진 횟수, 각 프레임의 첫 번째, 두 번째 점수 저장
+    private bool[] isSpare;     
+    private bool[] isStrike;    
+    private bool[][] hit;       // shootNum : 던진 수, k : 핀 개수, 쓰러짐 여부 저장
+    // 쓰러짐 여부를 검사할 높이
+    private float height;
 
-    private int PinScore(int i)
+    private void Awake()
+    {
+        height = Pin.transform.localScale.y;
+        Debug.Log(height);
+    }
+
+    /// <summary>
+    /// 쓰러진 핀 개수 계산
+    /// </summary>
+    /// <param name="shootNum">해당 프레임의 shootNum번째 시도</param>
+    /// <returns>쓰러진 핀 개수( = 점수)</returns>
+    int PinScore(int shootNum)
     {
         int count = 0;
         for (int k = 0; k < 10; k++)
         {
-            if (hit[i][k] == true)
-                count++;
+            // 몇 번째 shoot에서 k번째 핀이 쓰러졌는지 여부
+            if (SpawnManager.Instance.BowlingPin[k].transform.position.y < height)
+            {
+                hit[shootNum][k] = true;        // 쓰러지면 k번째 핀의 bool을 true로 변환
+                count++;                        // 쓰러진 개수 = 점수
+            }    
         }
-        return count;
+        return count;       // 점수로 연결
     }
     
     /// <summary>
@@ -33,6 +52,7 @@ public class ScoreBoard : MonoBehaviour
         if (isSpare[currentFrame - 1])
             Fscore[currentFrame - 1] += Frame[currentFrame][shoot];
     }
+    
     /// <summary>
     /// 이전 프레임이 스트라이크인 경우, 현재 프레임 두번째 샷 이후 이전 프레임 점수 계산
     /// </summary>
@@ -44,27 +64,39 @@ public class ScoreBoard : MonoBehaviour
         if (isStrike[currentFrame - 1])
             Fscore[currentFrame - 1] += Frame[currentFrame][shoot];
     }
+
+    void CleanupHittedPin(int pinNum)
+    {
+        SpawnManager.Instance.BowlingPin[pinNum].transform.position =
+            HittedPinPosition[pinNum].position + new Vector3(0, 0.2f, 0);
+        SpawnManager.Instance.BowlingPin[pinNum].transform.rotation = HittedPinPosition[pinNum].rotation;
+    }
     
     private void Update()
     {
+        // StartCoroutine(CalcScore());
+        // Score[i]
+    }
+
+    IEnumerator CalcScore()
+    {
         for(int i = 0; i < 10; i++)
         {
-            // 핀 리셋
+            SpawnManager.Instance.SetPinPosition();         // 모든 핀 리셋
             
             for (int j = 0; j < 2; j++)
             {
-                // 볼링공 소환 및 넘어진거 체크하는 알고리즘 넣기
-                // 핀 바닥에 Line을 넣고 Line이 벽과 만나면 hit[] = true
-                // Line이 바닥과 만나고 있으면 서있는 것으로 hit[] = false
+                SpawnManager.Instance.ResetBall();          // 공 소환
+                StartCoroutine(ThrowBall());         // 던지기
                 
                 // 첫번째 시도
                 if (j == 0)
                 {
-                    if (PinScore(i) == 10)
+                    if (PinScore(j) == 10)
                     {
                         isStrike[i] = true;
-                        Frame[i][j] = PinScore(i);
-                        Frame[i][j + 1] = 0;
+                        Frame[i][j] = PinScore(j);
+                        Frame[i][j + 1] = 0;            // 이러면 터키 계산할 때 문제가 된다. 
                         if (i >= 1)      // 이전 프레임 체크용. 인덱스 에러 방지
                         {
                             SpareScoreCheck(i, j);
@@ -82,7 +114,7 @@ public class ScoreBoard : MonoBehaviour
                     }
                     else
                     {
-                        Frame[i][j] = PinScore(i);
+                        Frame[i][j] = PinScore(j);
                         if (i >= 1)
                         {
                             SpareScoreCheck(i, j);
@@ -91,36 +123,51 @@ public class ScoreBoard : MonoBehaviour
                     }
                 }
                 
+                // 쓰러진 핀 치우기
+                for (int k = 0; k < 10; k++)
+                    if (hit[j][k] == true)          // 쓰러졌는가?
+                        CleanupHittedPin(k);        // 위쪽으로 치운다. 
+                
                 // 두번째 시도
                 if (j == 1)
                 {
-                    if (PinScore(i) == 10)
+                    if (PinScore(j) == 10)
                     {
-                        isStrike[i] = true;
-                        Frame[i][j] = PinScore(i)-Frame[i][j-1];
+                        isSpare[i] = true;
+                        Frame[i][j] = PinScore(j)-Frame[i][j-1];
                         StrikeScoreCheck(i, j);
                     }
                     else
                     {
-                        Frame[i][j] = PinScore(i);
+                        Frame[i][j] = PinScore(j);
                         StrikeScoreCheck(i, j);
                     }
-                    if(i==9 && isStrike[i])
-                        Frame[i][j] += PinScore(i);
-                    else
-                        Frame[i][j] += PinScore(i);
+                    // 마지막 프레임 두번째 슛이 스트라이크이거나 스페어인 경우 한번 더 던질 수 있다.
+                    if (i == 9 && (isStrike[i] || isSpare[i]))
+                    {
+                        Frame[i][j] += PinScore(j);
+                        j++;
+                        SpawnManager.Instance.SetPinPosition();
+                        // ThrowBall();
+                    }
                 }
             }
-
             if (!isSpare[i] && !isStrike[i])
                 Fscore[i] = Frame[i][0] + Frame[i][1];
             else
                 Fscore[i] = 10;         // 스페어거나 스트라이크이면 10점먹고 들어간다. 
         }
+        yield return new WaitForSeconds(1f);
     }
 
-    
-    
+    IEnumerator ThrowBall()
+    {
+        // 그랩 조건으로 던짐 여부 확인
+        // 핀과 공의 속도가 0.5 이하가 된지 5초 후에 점수 계산 부분으로 넘어감
+        // 함수로 만든 뒤, Invoke로 해도 될듯
+        
+        yield return new WaitForSeconds(.1f);
+    }
     
     
     

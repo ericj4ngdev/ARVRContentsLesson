@@ -16,16 +16,6 @@ public class BowlingManager : MonoBehaviour
     public void ResetBall()
     {
         BowlingBall.transform.position = spawnspot.position;
-    }
-    
-    
-    void Start()
-    {
-        
-    }
-
-    void Update()
-    {
-        
+        BowlingBall.transform.rotation = spawnspot.rotation;
     }
 }
