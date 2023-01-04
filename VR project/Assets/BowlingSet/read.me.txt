@@ -1,0 +1,38 @@
+All the assets are crafted to max quality and to be of the highest quality possible.
+
+You can contact me at clockwise.info@gmail.com or at clockwise.artstation.com
+
+Product :
+
+Bowling set: 4k textures, 
+Pin: 530 polys, 
+Bowling ball: 754 polys
+
+
+All textures are on 4k resolution.
+
+
+Prefabs are on the folders «prefabs».Drag and drop on scene so you have the mesh already with materials apllied to them
+
+
+The HDR included is from  gwronkowski -link of Post:
+https://www.keyshot.com/forum/index.php?topic=6382.0
+
+All the credit of HDR. goes to him, the EXR.File is only for Demo porpuses . 
+And I quote from the post above :
+
+
+
+ « You can download them for free and use for private or commercial works, but you can' redsitribute them, share etc.
+You need to register to download free hdri maps (just put any personal data if you're going to get only free hdri maps if you don't feel comfortable with this, and uncheck newsletter option if don't want it). 
+
+I hope that you will find my hdris usefull, athough they are only 5.000 x 2.500 (you can get on my website 20.000 x 10.000 if you wish).»
+
+Special authorization granted. Any further question use the contacts above mentioned.
+
+
+
+
+Hope you like this product and write a review in the asset store page. Thanks!
+
+
