@@ -18,7 +18,7 @@ GameObject:
   - component: {fileID: 5001108483450392613}
   m_Layer: 0
   m_Name: lowball_black
-  m_TagString: Untagged
+  m_TagString: Ball
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -134,6 +134,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 1500
+  m_MeterPerSecond: {fileID: 0}
+  m_KilometersPerHour: {fileID: 0}
 --- !u!114 &696393747878759753
 MonoBehaviour:
   m_ObjectHideFlags: 0

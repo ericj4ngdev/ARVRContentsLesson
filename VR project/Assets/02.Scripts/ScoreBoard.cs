@@ -1,6 +1,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Timers;
+using UnityEditor.UIElements;
 using UnityEngine;
 
 public class ScoreBoard : MonoBehaviour
@@ -15,11 +17,13 @@ public class ScoreBoard : MonoBehaviour
     private bool[][] hit;       // shootNum : 던진 수, k : 핀 개수, 쓰러짐 여부 저장
     // 쓰러짐 여부를 검사할 높이
     private float height;
+    public float Speed;
 
+    
     private void Awake()
     {
         height = Pin.transform.localScale.y;
-        Debug.Log(height);
+        // Debug.Log(height);
     }
 
     /// <summary>
@@ -71,11 +75,36 @@ public class ScoreBoard : MonoBehaviour
             HittedPinPosition[pinNum].position + new Vector3(0, 0.2f, 0);
         SpawnManager.Instance.BowlingPin[pinNum].transform.rotation = HittedPinPosition[pinNum].rotation;
     }
+
+    /*IEnumerator GetVelocity(GameObject prefab)
+    {
+        var currentPosition = prefab.transform.position;
+        //var velo;
+        //velo = (prefab.transform.position - prefab.transform.position)/Time.deltaTime;
+
+        return Speed;
+    }*/
     
+    void GetPinsSpeed()
+    {
+        // 10개 핀 읽어오는 함수
+        for (int i = 0; i < 10; i++)
+        {
+            // float speed = ;
+            // SpawnManager.Instance.BowlingPin[i].transform.position;
+        }
+    }
+
+    private void Start()
+    {
+        // throw new NotImplementedException();
+    }
+
     private void Update()
     {
         // StartCoroutine(CalcScore());
         // Score[i]
+        
     }
 
     IEnumerator CalcScore()
@@ -159,17 +188,45 @@ public class ScoreBoard : MonoBehaviour
         }
         yield return new WaitForSeconds(1f);
     }
-
+    
     IEnumerator ThrowBall()
     {
-        // 그랩 조건으로 던짐 여부 확인
-        // 핀과 공의 속도가 0.5 이하가 된지 5초 후에 점수 계산 부분으로 넘어감
-        // 함수로 만든 뒤, Invoke로 해도 될듯
+
+        //if ()
+            // 그랩 조건으로 던짐 여부 확인
+            // 핀과 공의 속도가 0.5 이하가 된지 5초 후에 점수 계산 부분으로 넘어감
+            // 함수로 만든 뒤, Invoke로 해도 될듯
+            //SpawnManager.Instance.BallPrefab
+        
         
         yield return new WaitForSeconds(.1f);
+        // StartCoroutine()
     }
-    
-    
-    
-    
+    // float Get
+    float GetBallSpeed(GameObject Ball)
+    {
+        Vector3 m_LastPosition = Ball.transform.position;
+        float speed = (((Ball.transform.position - m_LastPosition).magnitude) / Time.deltaTime); 
+        m_LastPosition = Ball.transform.position;            // 현재 벡터를 이전벡터로 저장
+
+        return speed; 
+    }
+
+    private void FixedUpdate()
+    {
+        Speed = GetBallSpeed(SpawnManager.Instance.BallPrefab);
+        // Debug.Log(Speed);
+    }
+
+    void OnTriggerEnter(Collider other)
+    {
+        // other.gameObject.transform.position;
+
+        if (other.gameObject.tag == "Ball")
+        {
+            Debug.Log("공 감지");
+            Invoke("CalcScore", 5f);
+        }// && GetBallSpeed(other.gameObject) < 0.1f)
+            
+    }
 }
