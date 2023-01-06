@@ -1,0 +1,28 @@
+{
+  "0a83aded8a1dcfb4a8fe6e244bb26434": {
+    "sceneGuid": "fdc5b8f301325f54b9d7fdf692459783",
+    "uniqueCameraId": "0a83aded8a1dcfb4a8fe6e244bb26434",
+    "name": "Pin Front",
+    "pointX": 0.07269036,
+    "pointY": -0.254607618,
+    "pointZ": 22.3437538,
+    "directionX": -0.163635239,
+    "directionY": -0.0163224675,
+    "directionZ": 0.00266130967,
+    "directionW": -0.986372,
+    "zoom": 1.63580143
+  },
+  "d4a9e7769107af047af248db3cf2cca7": {
+    "sceneGuid": "fdc5b8f301325f54b9d7fdf692459783",
+    "uniqueCameraId": "d4a9e7769107af047af248db3cf2cca7",
+    "name": "Defualt",
+    "pointX": 0.0103100324,
+    "pointY": 0.337830067,
+    "pointZ": 1.73104858,
+    "directionX": -0.083300516,
+    "directionY": -4.2545762E-05,
+    "directionZ": -4.247544E-05,
+    "directionW": -0.9965139,
+    "zoom": 1.63580143
+  }
+}

@@ -97,27 +97,36 @@ public class ScoreBoard : MonoBehaviour
 
     private void Start()
     {
-        // throw new NotImplementedException();
-    }
-
-    private void Update()
-    {
-        // StartCoroutine(CalcScore());
-        // Score[i]
-        
-    }
-
-    IEnumerator CalcScore()
-    {
-        for(int i = 0; i < 10; i++)
+        for (int i = 0; i < 10; i++)
         {
             SpawnManager.Instance.SetPinPosition();         // 모든 핀 리셋
-            
+            // StartCoroutine(BowlingFlow(i));
+        }
+    }
+
+    void ThrowBall(int j)
+    {
+        /*
+                // 그랩하고 그랩을 풀면 다시 돌아옴
+                // 던질때 가속하는 기능 구현
+                // if(!grap) return;
+                bool OnTriggerEnter(Collider other)
+                    {
+                        if (other.gameObject.tag == "Ball")
+                        {
+                            Debug.Log("공 감지");
+                            Invoke("CalcScore", 5f);
+                        }// && GetBallSpeed(other.gameObject) < 0.1f)
+                    }
+            }*/
+    }
+
+
+
+    /*IEnumerator CalcScore()
+    {
             for (int j = 0; j < 2; j++)
             {
-                SpawnManager.Instance.ResetBall();          // 공 소환
-                StartCoroutine(ThrowBall());         // 던지기
-                
                 // 첫번째 시도
                 if (j == 0)
                 {
@@ -185,14 +194,12 @@ public class ScoreBoard : MonoBehaviour
                 Fscore[i] = Frame[i][0] + Frame[i][1];
             else
                 Fscore[i] = 10;         // 스페어거나 스트라이크이면 10점먹고 들어간다. 
-        }
+        
         yield return new WaitForSeconds(1f);
-    }
+    }*/
     
     IEnumerator ThrowBall()
     {
-
-        //if ()
             // 그랩 조건으로 던짐 여부 확인
             // 핀과 공의 속도가 0.5 이하가 된지 5초 후에 점수 계산 부분으로 넘어감
             // 함수로 만든 뒤, Invoke로 해도 될듯
@@ -218,15 +225,6 @@ public class ScoreBoard : MonoBehaviour
         // Debug.Log(Speed);
     }
 
-    void OnTriggerEnter(Collider other)
-    {
-        // other.gameObject.transform.position;
 
-        if (other.gameObject.tag == "Ball")
-        {
-            Debug.Log("공 감지");
-            Invoke("CalcScore", 5f);
-        }// && GetBallSpeed(other.gameObject) < 0.1f)
-            
-    }
+    
 }
