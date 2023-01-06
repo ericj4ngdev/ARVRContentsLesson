@@ -23,7 +23,6 @@ public class ScoreBoard : MonoBehaviour
     private void Awake()
     {
         height = Pin.transform.localScale.y;
-        // Debug.Log(height);
     }
 
     /// <summary>

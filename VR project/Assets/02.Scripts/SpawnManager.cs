@@ -14,6 +14,7 @@ public class SpawnManager : MonoBehaviour
     public GameObject BallPrefab;
     public Transform spawnspot;
     private GameObject BowlingBall;
+    public Rigidbody rb;
 
     public static SpawnManager Instance
     {
@@ -50,18 +51,8 @@ public class SpawnManager : MonoBehaviour
     {
         for (int i = 0; i < PinPosition.Length; i++)
         {
-            // 소환하면서 배열에 등록 및 배치
-            BowlingPin[i] = Instantiate(BowlingPinprefab,PinPosition[i]);         // 소환, 
-            // BowlingPin[i].transform.position = BowlingPinprefab.transform.position; // 배치, 둥록
-            // Debug.Log(BowlingPin[i].transform.position);
+            BowlingPin[i] = Instantiate(BowlingPinprefab,PinPosition[i]);
         }
-    }
-
-    private void Update()
-    {
-        // Debug.Log(BowlingPin[0].transform.position);
-        //for (int i = 0; i < PinPosition.Length; i++)
-        //    BowlingPin[i].transform.position = PinPosition[i].position;     // 실시간으로 위치값 받기
     }
 
     public void SetPinPosition()
@@ -77,10 +68,12 @@ public class SpawnManager : MonoBehaviour
         }        
     }
     
-    public void ResetBall()
+    // ReSharper disable Unity.PerformanceAnalysis
+    public void ResetBall(GameObject gameObject)
     {
-        BowlingBall.transform.position = spawnspot.position;
-        BowlingBall.transform.rotation = spawnspot.rotation;
+        gameObject.transform.position = spawnspot.position;
+        gameObject.transform.rotation = spawnspot.rotation;
+        gameObject.GetComponent<Rigidbody>().velocity = new Vector3(0,0,0);
     }
     
 }
