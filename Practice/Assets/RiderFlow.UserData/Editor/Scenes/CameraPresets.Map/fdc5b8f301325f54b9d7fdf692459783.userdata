@@ -1,0 +1,28 @@
+{
+  "4dc3e058a79058c4cb81c6729fe9318b": {
+    "sceneGuid": "fdc5b8f301325f54b9d7fdf692459783",
+    "uniqueCameraId": "4dc3e058a79058c4cb81c6729fe9318b",
+    "name": "Ball",
+    "pointX": -0.02565426,
+    "pointY": 0.4050463,
+    "pointZ": -0.618345737,
+    "directionX": -0.112562,
+    "directionY": 0.00357140251,
+    "directionZ": -0.0004366527,
+    "directionW": -0.993601739,
+    "zoom": 0.179001555
+  },
+  "dccedc50a94994d46a1b8e121422ba47": {
+    "sceneGuid": "fdc5b8f301325f54b9d7fdf692459783",
+    "uniqueCameraId": "dccedc50a94994d46a1b8e121422ba47",
+    "name": "Pin",
+    "pointX": -5.784807E-05,
+    "pointY": 0.5832089,
+    "pointZ": 19.373558,
+    "directionX": -0.151216149,
+    "directionY": -0.005344475,
+    "directionZ": 0.0007854281,
+    "directionW": -0.988449633,
+    "zoom": 0.237143472
+  }
+}

@@ -1,31 +1,78 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class BowlingManager : MonoBehaviour
 {
+    [System.Serializable]           // 클래스 멤버들 serialize 
+    public class FrameScoreInfo
+    {
+        public int FirstShoothit;
+        public int SecondShoothit;
+        public bool isSpare;
+        public bool isStrike;
+        public int FrameScore;
+        public int CumulativeScore;
+    }
+    [SerializeField] private FrameScoreInfo[] frameScoreInfos;
+    
     public GameObject Pin;
-    public Transform[] HittedPinPosition;
-    private int[] Score;        // 누적 프레임 총 스코어
-    private int[] Fscore;       // 각 프레임의 총 점수
-    private int[][] Frame;      // i : 프레임, j : 던진 횟수, 각 프레임의 첫 번째, 두 번째 점수 저장
-    private bool[] isSpare;     
-    private bool[] isStrike;    
-    private bool[][] hit;       // shootNum : 던진 수, k : 핀 개수, 쓰러짐 여부 저장
-    // 쓰러짐 여부를 검사할 높이
-    private float height;
-    public float Speed;
-    
-    // ===========================================================
-    private int frame = 1;
-    public Transform Spawnspot;
     private GameObject Ball;
-
     
-    private void Awake()
+    private int totalFrame = 10;
+    private int totalShoots = 2;
+    private int totalPins = 10;
+    private int _currentFrame = 0;
+    private int _currentShoot = 0;
+    private float height;           // 쓰러짐 여부를 검사할 높이
+    
+    public Transform[] HittedPinPosition;
+    private int[] Score_1;        // 첫 시도 스코어 => FirstShoothit;
+    private int[] Score_2;        // 첫 시도 스코어 => SecondShoothit;
+    private int[] Fscore;       // 각 프레임의 총 점수 => FrameScore
+    private int[] Score;        // 누적 프레임 총 스코어 => CumulativeScore;
+    private bool[] isSpare;     
+    private bool[] isStrike;
+
+    // 삭제예정
+    private int[][] Frame;      // i : 프레임, j : 던진 횟수, 각 프레임의 첫 번째, 두 번째 점수 저장
+    private bool[][] hit;       // shootNum : 던진 수, k : 핀 개수, 쓰러짐 여부 저장
+
+
+    void Awake()
     {
         height = Pin.transform.localScale.y;
-        Ball = SpawnManager.Instance.BallPrefab;
+        Ball = SpawnManager.Instance.BallObject;
+        frameScoreInfos = new FrameScoreInfo[totalFrame];
+        // 동적 할당
+        Score_1 = new int[frameScoreInfos.Length];
+        Score_2 = new int[frameScoreInfos.Length];
+        Fscore = new int[frameScoreInfos.Length];
+        Score = new int[frameScoreInfos.Length];
+        isSpare = new bool[frameScoreInfos.Length];
+        isStrike = new bool[frameScoreInfos.Length];
+        // 초기화. 그런데 실제론 값이 모두 0...
+        /*for (int i = 0; i < frameScoreInfos.Length; i++)
+        {
+            Score_1[i] = frameScoreInfos[i].FirstShoothit;
+            Score_2[i] = frameScoreInfos[i].SecondShoothit;
+            Fscore[i] = frameScoreInfos[i].FrameScore;
+            Score[i] = frameScoreInfos[i].CumulativeScore;
+            isSpare[i] = frameScoreInfos[i].isSpare;
+            isStrike[i] = frameScoreInfos[i].isStrike;
+        }*/
+        
+        
+        int[][] Frame = new int[totalFrame][];
+        for (int i = 0; i < Frame.GetLength(0); i++)
+            Frame[i] = new int[totalShoots];
+
+        isSpare = new bool[totalFrame];
+        isStrike = new bool[totalFrame];
+        bool[][] hit = new bool[totalShoots][];
+        for (int i = 0; i < hit.GetLength(0); i++)
+            hit[i] = new bool[totalPins];
     }
 
     /// <summary>
@@ -38,7 +85,6 @@ public class BowlingManager : MonoBehaviour
         if (isSpare[currentFrame - 1])
             Fscore[currentFrame - 1] += Frame[currentFrame][shoot];
     }
-    
     /// <summary>
     /// 이전 프레임이 스트라이크인 경우, 현재 프레임 두번째 샷 이후 이전 프레임 점수 계산
     /// </summary>
@@ -55,54 +101,109 @@ public class BowlingManager : MonoBehaviour
     /// </summary>
     /// <param name="shootNum">해당 프레임의 shootNum번째 시도</param>
     /// <returns>쓰러진 핀 개수( = 점수)</returns>
+    void CleanupHittedPin(int pinNum)
+    {
+        print("CleanupHittedPin");
+        SpawnManager.Instance.BowlingPin[pinNum].transform.position =
+            HittedPinPosition[pinNum].position + new Vector3(0, 0.5f, 0);
+        SpawnManager.Instance.BowlingPin[pinNum].transform.rotation = HittedPinPosition[pinNum].rotation * Quaternion.Euler(90,0,0);;
+    }
+
+
+    void Update()
+    {
+        // 게임 시작 버튼 개념
+        // 나중에 UI에 연결. 업데이트에서 안해도 될듯
+        if (Input.GetKeyDown(KeyCode.Keypad1))
+        {
+            print("게임 시작");
+            StartCoroutine(FrameNum(_currentFrame));
+        }   
+    }
+
+    IEnumerator FrameNum(int frame)
+    {
+        print("SetPinPosition() 호출");
+        SpawnManager.Instance.SetPinPosition();
+        while(true)
+        {
+            print($"{frame+1}번째 프레임");
+            for (_currentShoot = 0; _currentShoot < 2; _currentShoot++)
+            {
+                yield return StartCoroutine(Shoot(Ball, _currentShoot));
+                // 점수 계산
+                print($"{_currentShoot}");
+                print($"{frame}");
+                CalcScore(frame, _currentShoot);
+
+                if (frame == 10 && _currentShoot == 1 && isStrike[frame])
+                {
+                    // 핀 소환
+                    yield return StartCoroutine(Shoot(Ball, 2));
+                    break;
+                }
+            }
+            frame++;
+            if(frame > 10)
+                break;
+        }
+        print("종료");
+        // 점수 공개
+    }
+    
+    // 던지는 시도 1, 2번
+    IEnumerator Shoot(GameObject Ball, int currentShoot)
+    {
+        print($"{currentShoot+1}번째 shoot");
+        yield return StartCoroutine(hitpin(Ball));
+        // i==1? CleanupHittedPin() : 치우는 게 pinscore에 있어서 문제...  
+        SpawnManager.Instance.ResetBall(Ball);
+    }
+    
+    // 공 감지 후 5초 뒤
+    IEnumerator hitpin(GameObject ball)
+    {
+        while (true)
+        {
+            if (ball.transform.position.z >= 20)
+            {
+                Debug.Log(ball.transform.position.z);
+                print("공 감지");
+                yield return new WaitForSeconds(5f);
+                break;
+            }
+            yield return null;
+        }
+    }
     int PinScore(int shootNum)
     {
+        print($"{shootNum}");
         int count = 0;
         for (int k = 0; k < 10; k++)
         {
             // 몇 번째 shoot에서 k번째 핀이 쓰러졌는지 여부
-            if (SpawnManager.Instance.BowlingPin[k].transform.position.y < height)
+            if (SpawnManager.Instance.BowlingPin[0].transform.GetChild(0).transform.position.y < height)
             {
-                CleanupHittedPin(k);
-                hit[shootNum][k] = true;        // 쓰러지면 k번째 핀의 bool을 true로 변환
+                // CleanupHittedPin(k);
+                // print($"{hit[shootNum][k]}");
+                hit[shootNum][k] = new bool();
                 count++;                        // 쓰러진 개수 = 점수
             }    
         }
+        print(count);
         return count;       // 점수로 연결
     }
     
-    void CleanupHittedPin(int pinNum)
-    {
-        SpawnManager.Instance.BowlingPin[pinNum].transform.position =
-            HittedPinPosition[pinNum].position + new Vector3(0, 0.2f, 0);
-        SpawnManager.Instance.BowlingPin[pinNum].transform.rotation = HittedPinPosition[pinNum].rotation;
-    }
-
-    private void Start()
-    {
-        // for (int i = 0; i < 10; i++)
-        // {
-        //     SpawnManager.Instance.SetPinPosition();         // 모든 핀 리셋
-        // }
-    }
-    
-    void Update()
-    {
-        // 게임 시작 버튼 개념
-        if (Input.GetKeyDown(KeyCode.Keypad1))
-        {
-            StartCoroutine(FrameNum(frame));
-        }   
-    }
-
     void CalcScore(int frame_num, int shoot_num)
     {
+        print("계산 시작!!");
+        print($"{shoot_num}");
         if (shoot_num == 0)
         {
             if (PinScore(shoot_num) == 10)
             {
                 isStrike[frame_num] = true;
-                Frame[frame_num][shoot_num] = PinScore(shoot_num);
+                Frame[frame_num][shoot_num] = PinScore(shoot_num);          // 여기 널 레퍼런스
                 if (frame_num >= 1) // 이전 프레임 체크용. 인덱스 에러 방지
                 {
                     SpareScoreCheck(frame_num, shoot_num);
@@ -155,64 +256,6 @@ public class BowlingManager : MonoBehaviour
             Fscore[frame_num] = Frame[frame_num][0] + Frame[frame_num][1];
         else
             Fscore[frame_num] = 10;         // 스페어거나 스트라이크이면 10점먹고 들어간다. 
-    }
-
-    IEnumerator FrameNum(int frame)
-    {
-        print("SetPinPosition() 호출");
-        SpawnManager.Instance.SetPinPosition();
-        while(true)
-        {
-            print($"{frame}번째 프레임");
-            for (int i = 0; i < 2; i++)
-            {
-                yield return StartCoroutine(Shoot(Ball, i, frame));
-                // 점수 계산
-                CalcScore(frame, i);
-
-                if (frame == 10 && i == 1 && isStrike[frame])
-                {
-                    // 핀 소환
-                    yield return StartCoroutine(Shoot(Ball, 2, 10));
-                    break;
-                }
-            }
-            frame++;
-            if(frame > 10)
-                break;
-        }
-        print("종료");
-        // 점수 공개
-    }
-    
-    // 던지는 시도 1, 2번
-    IEnumerator Shoot(GameObject Ball, int i, int frame)
-    {
-        print($"{i+1}번째 shoot");
-        yield return StartCoroutine(hitpin(Ball));
-        // i==1? CleanupHittedPin() : 치우는 게 pinscore에 있어서 문제...  
-        SpawnManager.Instance.ResetBall(Ball);
-    }
-    
-    // 공 감지 후 5초 뒤
-    IEnumerator hitpin(GameObject ball)
-    {
-        while (true)
-        {
-            if (ball.transform.position.z >= 20)
-            {
-                Debug.Log(ball.transform.position.z);
-                print("공 감지");
-                yield return new WaitForSeconds(5f);
-                break;
-            }
-            yield return null;
-        }
-    }
-
-    void calc()
-    {
-        print("계산 완료!!");
     }
 
 

@@ -13,8 +13,8 @@ public class SpawnManager : MonoBehaviour
     
     public GameObject BallPrefab;
     public Transform spawnspot;
-    private GameObject BowlingBall;
-    public Rigidbody rb;
+    // [HideInInspector] public Rigidbody rb;
+    [HideInInspector] public GameObject BallObject;
 
     public static SpawnManager Instance
     {
@@ -38,7 +38,7 @@ public class SpawnManager : MonoBehaviour
         else
             Destroy(this.gameObject);
         
-        BowlingBall = Instantiate(BallPrefab,spawnspot);
+        // BallObject = Instantiate(BallPrefab,spawnspot);
         PinPosition = new Transform[transform.childCount];
         BowlingPin = new GameObject[PinPosition.Length];
         for (int i = 0; i < PinPosition.Length; i++)
@@ -52,6 +52,7 @@ public class SpawnManager : MonoBehaviour
         for (int i = 0; i < PinPosition.Length; i++)
         {
             BowlingPin[i] = Instantiate(BowlingPinprefab,PinPosition[i]);
+            // Debug.Log(transform.GetChild(i).transform.position);
         }
     }
 
@@ -64,7 +65,7 @@ public class SpawnManager : MonoBehaviour
         {
             // Debug.Log(BowlingPin[i].transform.position);
             BowlingPin[i].transform.position = PinPosition[i].position+new Vector3(0,0.2f,0);
-            BowlingPin[i].transform.rotation = PinPosition[i].rotation;
+            BowlingPin[i].transform.rotation = PinPosition[i].rotation * Quaternion.Euler(90,0,0);
         }        
     }
     
@@ -75,5 +76,13 @@ public class SpawnManager : MonoBehaviour
         gameObject.transform.rotation = spawnspot.rotation;
         gameObject.GetComponent<Rigidbody>().velocity = new Vector3(0,0,0);
     }
-    
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Keypad0))
+        {
+            ResetBall(BallObject);
+            // rb.velocity = new Vector3(0, 0, 0);
+        }
+    }
 }

@@ -12,11 +12,7 @@ public class ControllerButton : MonoBehaviour
     // public InputActionProperty PressA;
     // public InputActionProperty PressB;
 
-    void SpawnBowlingBall()
-    {
-        GameObject Ball = Instantiate(BallPrefab);
-        Ball.transform.position = spawnspot.position;
-    }
+    
 
     void Update()
     {

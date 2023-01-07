@@ -75,15 +75,6 @@ public class ScoreBoard : MonoBehaviour
         SpawnManager.Instance.BowlingPin[pinNum].transform.rotation = HittedPinPosition[pinNum].rotation;
     }
 
-    /*IEnumerator GetVelocity(GameObject prefab)
-    {
-        var currentPosition = prefab.transform.position;
-        //var velo;
-        //velo = (prefab.transform.position - prefab.transform.position)/Time.deltaTime;
-
-        return Speed;
-    }*/
-    
     void GetPinsSpeed()
     {
         // 10개 핀 읽어오는 함수
@@ -101,23 +92,6 @@ public class ScoreBoard : MonoBehaviour
             SpawnManager.Instance.SetPinPosition();         // 모든 핀 리셋
             // StartCoroutine(BowlingFlow(i));
         }
-    }
-
-    void ThrowBall(int j)
-    {
-        /*
-                // 그랩하고 그랩을 풀면 다시 돌아옴
-                // 던질때 가속하는 기능 구현
-                // if(!grap) return;
-                bool OnTriggerEnter(Collider other)
-                    {
-                        if (other.gameObject.tag == "Ball")
-                        {
-                            Debug.Log("공 감지");
-                            Invoke("CalcScore", 5f);
-                        }// && GetBallSpeed(other.gameObject) < 0.1f)
-                    }
-            }*/
     }
 
 

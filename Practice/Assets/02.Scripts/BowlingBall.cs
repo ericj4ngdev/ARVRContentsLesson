@@ -5,23 +5,12 @@ using UnityEngine.UI;
 
 public class BowlingBall : MonoBehaviour
 {
-    Transform tr;
-    Rigidbody rb;
-    public float speed;
-    public float mSpeed;
-    public Vector3 m_LastPosition;         // 초기 속도(=벡터)
-    public Text m_MeterPerSecond, m_KilometersPerHour;
-
-    float GetSpeed() 
-    { 
-        float speed = (((transform.position - m_LastPosition).magnitude) / Time.deltaTime); 
-        //Debug.Log("초기 위치 : " + m_LastPosition.magnitude);                // 초기
-        //Debug.Log("나중 위치 : " + transform.position.magnitude);            // 나중
-        m_LastPosition = transform.position; 
-   
-        return speed; 
-    } 
+    [Range(0, 10000)] public float mSpeed;
+    [HideInInspector] public Transform tr;
+    [HideInInspector] public Rigidbody rb;
     
+    public Vector3 shootVector;
+
     private void Awake()
     {
         tr = GetComponent<Transform>();
@@ -30,20 +19,20 @@ public class BowlingBall : MonoBehaviour
 
     private void Start()
     {
-        rb.AddForce(Vector3.forward * mSpeed);
+        shootVector = new Vector3(0, 0, 1);
+        // Ballspeed.SpeedText();
     }
     void FixedUpdate()
     {
-        // speed = rd.velocity.magnitude;
-        speed = GetSpeed();
-        // Debug.Log("속도 : " + speed);
-        
-        m_MeterPerSecond.text = string.Format("{0:00.00} m/s", speed); 
-        m_KilometersPerHour.text = string.Format("{0:00.00} km/h", speed * 3.6f); 
+        float Speed = rb.velocity.magnitude;
     } 
-    
-    void Update()
+    private void Update()
     {
-        // tr.position = new Vector3(tr.position.x, 0, tr.position.z).normalized;
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            mSpeed = 1000;
+            rb.AddForce(shootVector * mSpeed);
+            // BowlingBall.GetComponent<Rigidbody>().AddForce(Vector3.forward * mSpeed);
+        }
     }
 }
