@@ -38,7 +38,7 @@ public class SpawnManager : MonoBehaviour
         else
             Destroy(this.gameObject);
         
-        // BallObject = Instantiate(BallPrefab,spawnspot);
+        BallObject = Instantiate(BallPrefab,spawnspot);
         PinPosition = new Transform[transform.childCount];
         BowlingPin = new GameObject[PinPosition.Length];
         for (int i = 0; i < PinPosition.Length; i++)

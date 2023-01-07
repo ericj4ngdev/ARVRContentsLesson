@@ -1,4 +1,17 @@
 {
+  "c329b559dc99bde419c660d04b572dc2": {
+    "sceneGuid": "fdc5b8f301325f54b9d7fdf692459783",
+    "uniqueCameraId": "c329b559dc99bde419c660d04b572dc2",
+    "name": "HittedPins",
+    "pointX": 0.0147842234,
+    "pointY": 1.190492,
+    "pointZ": 18.6743,
+    "directionX": -0.166023687,
+    "directionY": 0.006500851,
+    "directionZ": -0.00112679938,
+    "directionW": -0.986062765,
+    "zoom": 0.237143472
+  },
   "4dc3e058a79058c4cb81c6729fe9318b": {
     "sceneGuid": "fdc5b8f301325f54b9d7fdf692459783",
     "uniqueCameraId": "4dc3e058a79058c4cb81c6729fe9318b",
@@ -24,5 +37,18 @@
     "directionZ": 0.0007854281,
     "directionW": -0.988449633,
     "zoom": 0.237143472
+  },
+  "74521f84ac5745346b6385c5fc4bce8f": {
+    "sceneGuid": "fdc5b8f301325f54b9d7fdf692459783",
+    "uniqueCameraId": "74521f84ac5745346b6385c5fc4bce8f",
+    "name": "Camera Preset",
+    "pointX": 0.121462226,
+    "pointY": 0.7513381,
+    "pointZ": 19.0182877,
+    "directionX": 0.182191968,
+    "directionY": -0.08395459,
+    "directionZ": 0.0156184155,
+    "directionW": 0.979538,
+    "zoom": 0.237143531
   }
 }
