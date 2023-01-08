@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class BowlingManager : MonoBehaviour
 {
@@ -16,7 +17,8 @@ public class BowlingManager : MonoBehaviour
         public int CumulativeScore;
     }
     [SerializeField] private ScoreInfo[] scoreInfos;
-    
+
+    public Text[] FrameScore;
     public GameObject Pin;
     private GameObject Ball;
     
@@ -149,6 +151,11 @@ public class BowlingManager : MonoBehaviour
                     break;
                 }
             }
+            Debug.Log(frame);
+            Debug.Log(Fscore[frame]);
+            Debug.Log(Fscore[frame].ToString());
+            // FrameScore[frame].text = Fscore[frame].ToString();
+            // 인덱스 에러뜸. 재확인 바람
             frame++;
             if(frame > 10)
                 break;
@@ -172,9 +179,10 @@ public class BowlingManager : MonoBehaviour
         {
             if (ball.transform.position.z >= 20)
             {
-                Debug.Log(ball.transform.position.z);
+                // Debug.Log(ball.transform.position.z);
                 print("공 감지");
                 yield return new WaitForSeconds(5f);
+                ball.GetComponent<Rigidbody>().velocity = new Vector3(0, 0, 0);
                 break;
             }
             yield return null;
@@ -198,13 +206,13 @@ public class BowlingManager : MonoBehaviour
     
     void CalcScore(int frame_num, int shoot_num)
     {
-        print("계산 시작!!");
         if (shoot_num == 0)
         {
-            if (PinScore() == 10)
+            Score_1[frame_num] = PinScore();
+            if (Score_1[frame_num] == 10)
             {
                 isStrike[frame_num] = true;
-                Score_1[frame_num] = PinScore();          // 여기 널 레퍼런스
+                Fscore[frame_num] = Score_1[frame_num];
                 if (frame_num >= 1) // 이전 프레임 체크용. 인덱스 에러 방지
                 {
                     SpareScoreCheck(frame_num);
@@ -221,7 +229,6 @@ public class BowlingManager : MonoBehaviour
             }
             else
             {
-                Score_1[frame_num] = PinScore();
                 if (frame_num >= 1)
                 {
                     SpareScoreCheck(frame_num);
@@ -234,11 +241,12 @@ public class BowlingManager : MonoBehaviour
 
         if (shoot_num == 1)
         {
-            if (PinScore() == 10) // 스페어
+            Score_2[frame_num] = PinScore();
+            Fscore[frame_num] = Score_1[frame_num] + Score_2[frame_num];
+            if (Fscore[frame_num] == 10) // 스페어
             {
                 isSpare[frame_num] = true;
             }
-            Score_2[frame_num] = PinScore();
             // StrikeScoreCheck(frame_num);
             if (frame_num >= 1)
             {
@@ -255,88 +263,6 @@ public class BowlingManager : MonoBehaviour
                 SpawnManager.Instance.SetPinPosition();
                 // ThrowBall();
             }
-        }
-        if (!isSpare[frame_num] && !isStrike[frame_num])
-            Fscore[frame_num] = Score_1[frame_num] + Score_2[frame_num];
-        else
-            Fscore[frame_num] = 10;         // 스페어거나 스트라이크이면 10점먹고 들어간다. 
+        } 
     }
-
-
-    /*IEnumerator CalcScore()
-    {
-            for (int j = 0; j < 2; j++)
-            {
-                // 첫번째 시도
-                if (j == 0)
-                {
-                    if (PinScore(j) == 10)
-                    {
-                        isStrike[i] = true;
-                        Frame[i][j] = PinScore(j);
-                        Frame[i][j + 1] = 0;            // 이러면 터키 계산할 때 문제가 된다. 
-                        if (i >= 1)      // 이전 프레임 체크용. 인덱스 에러 방지
-                        {
-                            SpareScoreCheck(i, j);
-                            if (isStrike[i - 1]) // 2연속 스트라이크(더블)인 경우 점수계산
-                            {
-                                Fscore[i - 1] += Frame[i][j];
-                                if (i >= 2)
-                                {
-                                    if (isStrike[i - 2]) // 3연속 스트라이크(터키)인 경우 점수계산
-                                        Fscore[i - 2] += Frame[i][j];
-                                }
-                            }
-                        }
-                        break;
-                    }
-                    else
-                    {
-                        Frame[i][j] = PinScore(j);
-                        if (i >= 1)
-                        {
-                            SpareScoreCheck(i, j);
-                            StrikeScoreCheck(i, j);
-                        }
-                    }
-                }
-                
-                // 쓰러진 핀 치우기
-                for (int k = 0; k < 10; k++)
-                    if (hit[j][k] == true)          // 쓰러졌는가?
-                        CleanupHittedPin(k);        // 위쪽으로 치운다. 
-                
-                // 두번째 시도
-                if (j == 1)
-                {
-                    if (PinScore(j) == 10)
-                    {
-                        isSpare[i] = true;
-                        Frame[i][j] = PinScore(j)-Frame[i][j-1];
-                        StrikeScoreCheck(i, j);
-                    }
-                    else
-                    {
-                        Frame[i][j] = PinScore(j);
-                        StrikeScoreCheck(i, j);
-                    }
-                    // 마지막 프레임 두번째 슛이 스트라이크이거나 스페어인 경우 한번 더 던질 수 있다.
-                    if (i == 9 && (isStrike[i] || isSpare[i]))
-                    {
-                        Frame[i][j] += PinScore(j);
-                        j++;
-                        SpawnManager.Instance.SetPinPosition();
-                        // ThrowBall();
-                    }
-                }
-            }
-            if (!isSpare[i] && !isStrike[i])
-                Fscore[i] = Frame[i][0] + Frame[i][1];
-            else
-                Fscore[i] = 10;         // 스페어거나 스트라이크이면 10점먹고 들어간다. 
-        
-        yield return new WaitForSeconds(1f);
-    }*/
-
-
 }

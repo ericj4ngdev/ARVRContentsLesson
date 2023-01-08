@@ -121,6 +121,7 @@
      <Compile Include="Assets\BowlingSet\Standard Assets\Effects\ImageEffects\Scripts\VignetteAndChromaticAberration.cs" />
      <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_FrameRateCounter.cs" />
      <Compile Include="Assets\BowlingSet\Standard Assets\Effects\ImageEffects\Scripts\ImageEffectBase.cs" />
+     <Compile Include="Assets\02.Scripts\CameraController.cs" />
      <Compile Include="Assets\GameManager.cs" />
      <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\VertexJitter.cs" />
      <Compile Include="Assets\BowlingSet\Standard Assets\Effects\ImageEffects\Scripts\NoiseAndGrain.cs" />
@@ -155,6 +156,7 @@
      <None Include="Assets\BowlingSet\Standard Assets\Effects\ImageEffects\Shaders\_Antialiasing\FXAAPreset3.shader" />
      <None Include="Assets\BowlingSet\Standard Assets\Effects\ImageEffects\Shaders\CameraMotionBlurDX11.shader" />
      <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap.shader" />
+     <None Include="Assets\GPM\LICENSE.txt" />
      <None Include="Assets\BowlingSet\Standard Assets\Effects\ImageEffects\Shaders\VignettingShader.shader" />
      <None Include="Assets\BowlingSet\Standard Assets\Effects\ImageEffects\Shaders\ColorCorrectionCurves.shader" />
      <None Include="Assets\TextMesh Pro\Examples &amp; Extras\Fonts\Oswald-Bold - OFL.txt" />
@@ -868,6 +870,18 @@
  </Reference>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="gpm_cachestorage.csproj">
+      <Project>{498c84c4-d89e-1b1e-bbdd-dffea1830e8d}</Project>
+      <Name>gpm_cachestorage</Name>
+    </ProjectReference>
+    <ProjectReference Include="gpm_common.csproj">
+      <Project>{7dab64ea-a3fb-3228-5193-fa769b28f42b}</Project>
+      <Name>gpm_common</Name>
+    </ProjectReference>
+    <ProjectReference Include="gpm_ui.csproj">
+      <Project>{9afb1c9b-de11-7ff1-3366-46429ab7e185}</Project>
+      <Name>gpm_ui</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.

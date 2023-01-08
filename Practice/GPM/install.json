@@ -1,0 +1,24 @@
+{
+    "installs": [
+        {
+            "name": "Common",
+            "version": "2.2.3",
+            "dependency": []
+        },
+        {
+            "name": "CacheStorage",
+            "version": "1.0.1",
+            "dependency": [
+                "Common"
+            ]
+        },
+        {
+            "name": "UI",
+            "version": "2.7.0",
+            "dependency": [
+                "Common",
+                "CacheStorage"
+            ]
+        }
+    ]
+}

@@ -135,8 +135,8 @@ MonoBehaviour:
   mSpeed: 0
   tr: {fileID: 0}
   rb: {fileID: 0}
-  m_MeterPerSecond: {fileID: 0}
-  m_KilometersPerHour: {fileID: 0}
+  shootVector: {x: 0, y: 0, z: 0}
+  speed: 1
 --- !u!135 &1444434874835344227
 SphereCollider:
   m_ObjectHideFlags: 0
