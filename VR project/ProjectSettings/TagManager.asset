@@ -8,6 +8,7 @@ TagManager:
   - Right Hand
   - Wall
   - Ball
+  - Bullet
   layers:
   - Default
   - TransparentFX

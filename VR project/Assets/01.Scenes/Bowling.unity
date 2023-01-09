@@ -4435,6 +4435,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Speed: 0
+  m_Acceleration: 0
+  m_Velocity: {x: 0, y: 0, z: 0}
   m_MeterPerSecond: {fileID: 0}
   m_KilometersPerHour: {fileID: 0}
 --- !u!1 &721446463
