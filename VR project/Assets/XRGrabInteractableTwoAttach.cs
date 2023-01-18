@@ -21,6 +21,4 @@ public class XRGrabInteractableTwoAttach : XRGrabInteractable
 
         base.OnSelectEntered(args);
     }
-
-
 }
