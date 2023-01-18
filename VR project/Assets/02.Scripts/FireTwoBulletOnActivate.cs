@@ -8,9 +8,9 @@ using UnityEngine.XR.Interaction.Toolkit;
 public class FireTwoBulletOnActivate : MonoBehaviour
 {
     public GameObject bullet_1;
-    public GameObject bullet_2;
+    //public GameObject bullet_2;
     public Transform spawnPoint_1;
-    public Transform spawnPoint_2;
+    //public Transform spawnPoint_2;
     public float fireSpeed;
 
     // Start is called before the first frame update
@@ -32,12 +32,12 @@ public class FireTwoBulletOnActivate : MonoBehaviour
         spawnedBullet_1.transform.position = spawnPoint_1.position;
         spawnedBullet_1.GetComponent<Rigidbody>().velocity = spawnPoint_1.forward * fireSpeed;
         
-        GameObject spawnedBullet_2 = Instantiate(bullet_2);
-        spawnedBullet_2.transform.position = spawnPoint_2.position;
-        spawnedBullet_2.GetComponent<Rigidbody>().velocity = spawnPoint_2.forward * fireSpeed;
+        //GameObject spawnedBullet_2 = Instantiate(bullet_2);
+        //spawnedBullet_2.transform.position = spawnPoint_2.position;
+        //spawnedBullet_2.GetComponent<Rigidbody>().velocity = spawnPoint_2.forward * fireSpeed;
         
         Destroy(spawnedBullet_1, 5);
-        Destroy(spawnedBullet_2, 5);
+        //Destroy(spawnedBullet_2, 5);
     }
 
 }

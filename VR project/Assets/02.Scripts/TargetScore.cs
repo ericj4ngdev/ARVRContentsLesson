@@ -6,9 +6,9 @@ using UnityEngine.UI;
 
 public class TargetScore : MonoBehaviour
 {
-    public int yellow_target = 10;
-    public int red_target = 5;
-    public int blue_target = 1;
+    private int yellow_target = 5;
+    private int red_target = 4;
+    private int blue_target = 1;
     // public ScoreSingleton Score_;
 
     private void Start()
@@ -22,7 +22,7 @@ public class TargetScore : MonoBehaviour
     {
         if (other.tag == "Bullet")
         {
-            switch (name)
+            switch (this.transform.name)
             {
                 case "Score_1":
                     Debug.Log("5점 획득");
