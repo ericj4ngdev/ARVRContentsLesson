@@ -103,7 +103,6 @@ GameObject:
   - component: {fileID: 229150799485570796}
   - component: {fileID: 229150799485570797}
   - component: {fileID: 229150799485570786}
-  - component: {fileID: 229150799485570798}
   m_Layer: 7
   m_Name: pistol
   m_TagString: Untagged
@@ -301,33 +300,6 @@ MonoBehaviour:
   m_AddDefaultGrabTransformers: 1
   leftAttachTransform: {fileID: 229150800896281748}
   rightAttachTransform: {fileID: 229150800111274397}
---- !u!114 &229150799485570798
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4445762692065201600}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f55ecb21c9879c745ac55dbdb22b4fda, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  hapticOnActivated:
-    intensity: 1
-    duration: 1
-  hapticHoverEntered:
-    intensity: 0.222
-    duration: 0.262
-  hapticHoverExited:
-    intensity: 0
-    duration: 0
-  hapticSelectEntered:
-    intensity: 0.7
-    duration: 0.7
-  hapticSelectExited:
-    intensity: 0
-    duration: 0
 --- !u!1 &4445762692065201604
 GameObject:
   m_ObjectHideFlags: 0

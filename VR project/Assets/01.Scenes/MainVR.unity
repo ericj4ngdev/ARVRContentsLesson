@@ -661,8 +661,8 @@ MonoBehaviour:
   m_HapticSelectCancelIntensity: 0
   m_HapticSelectCancelDuration: 0
   m_PlayHapticsOnHoverEntered: 0
-  m_HapticHoverEnterIntensity: 0
-  m_HapticHoverEnterDuration: 0
+  m_HapticHoverEnterIntensity: 0.287
+  m_HapticHoverEnterDuration: 2
   m_PlayHapticsOnHoverExited: 0
   m_HapticHoverExitIntensity: 0
   m_HapticHoverExitDuration: 0
@@ -7201,6 +7201,38 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1792488298}
   m_CullTransparentMesh: 1
+--- !u!1 &1907166617 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4445762692065201600, guid: b49bc094c6bb01c43b1d84149f14ac58, type: 3}
+  m_PrefabInstance: {fileID: 229150799091560725}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1907166618
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1907166617}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f55ecb21c9879c745ac55dbdb22b4fda, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hapticOnActivated:
+    intensity: 0.238
+    duration: 0.149
+  hapticHoverEntered:
+    intensity: 1
+    duration: 0.1
+  hapticHoverExited:
+    intensity: 0
+    duration: 0
+  hapticSelectEntered:
+    intensity: 1
+    duration: 1
+  hapticSelectExited:
+    intensity: 0
+    duration: 0
 --- !u!1 &1945024347
 GameObject:
   m_ObjectHideFlags: 0
